@@ -1,54 +1,54 @@
 package fuzzy
 
-import "math"
-
-const (
-	// MustBeLowCompetence is
-	MustBeLowCompetence = 30
-	// MustNotBeLowCompetence is
-	MustNotBeLowCompetence = 50
-
-	// MustNotBeMiddleLowCompetence is
-	MustNotBeMiddleLowCompetence = 50
-	// MustBeMiddleLowCompetence is
-	MustBeMiddleLowCompetence = 65
-	// MustBeMiddleHighCompetence is
-	MustBeMiddleHighCompetence = 75
-	// MustNotBeMiddleHighCompetence is
-	MustNotBeMiddleHighCompetence = 80
-
-	// MustNotBeHighCompetence is
-	MustNotBeHighCompetence = 65
-	// MustBeHighCompetence is
-	MustBeHighCompetence = 85
+import (
+	"math"
 )
 
 const (
-	// MustBeLowPersonality is
-	MustBeLowPersonality = 15
-	// MustNotBeLowPersonality is
-	MustNotBeLowPersonality = 35
+	// LowCompetence is
+	LowCompetence = 50
+	// NotLowCompetence is
+	NotLowCompetence = 55
 
-	// MustNotBeMiddleLowPersonality is
-	MustNotBeMiddleLowPersonality = 10
-	// MustBeMiddleLowPersonality is
-	MustBeMiddleLowPersonality = 40
-	// MustBeMiddleHighPersonality is
-	MustBeMiddleHighPersonality = 50
-	// MustNotBeMiddleHighPersonality is
-	MustNotBeMiddleHighPersonality = 75
+	// NotMiddleLowCompetence is
+	NotMiddleLowCompetence = 52.5
+	// MiddleLowCompetence is
+	MiddleLowCompetence = 60
+	// MiddleHighCompetence is
+	MiddleHighCompetence = 65
+	// NotMiddleHighCompetence is
+	NotMiddleHighCompetence = 67.5
 
-	// MustNotBeHighPersonality is
-	MustNotBeHighPersonality = 45
-	//MustBeHighPersonality is
-	MustBeHighPersonality = 70
+	// NotHighCompetence is
+	NotHighCompetence = 65
+	// HighCompetence is
+	HighCompetence = 70
+)
+
+const (
+	// LowPersonality is
+	LowPersonality = 50
+	// NotLowPersonality is
+	NotLowPersonality = 55
+
+	// NotMiddleLowPersonality is
+	NotMiddleLowPersonality = 52.5
+	// MiddleLowPersonality is
+	MiddleLowPersonality = 60
+	// MiddleHighPersonality is
+	MiddleHighPersonality = 65
+	// NotMiddleHighPersonality is
+	NotMiddleHighPersonality = 75
+
+	// NotHighPersonality is
+	NotHighPersonality = 70
+	//HighPersonality is
+	HighPersonality = 77.5
 )
 
 const (
 	// AcceptedValue is
 	AcceptedValue = 100
-	// ConsideredValue is
-	ConsideredValue = 70
 	// RejectedValue is
 	RejectedValue = 50
 )
@@ -74,115 +74,133 @@ type Number struct {
 	CompetenceMembership  []float64
 	PersonalityMembership []float64
 
-	AcceptedInference   float64
-	ConsideredInference float64
-	RejectedInference   float64
+	AcceptedInference float64
+	RejectedInference float64
 
 	CrispValue float64
+	Inference  string
 }
 
-// BLT is
-type BLT struct {
+// EmployeeAcceptance is
+type EmployeeAcceptance struct {
 }
 
 // Fuzzification is
-func (b *BLT) Fuzzification(number *Number) error {
-	number.CompetenceMembership = append(number.CompetenceMembership, b.CompetenceLow(number.Interview.Competence))
-	number.CompetenceMembership = append(number.CompetenceMembership, b.ComptenceMiddle(number.Interview.Competence))
-	number.CompetenceMembership = append(number.CompetenceMembership, b.CompetenceHigh(number.Interview.Competence))
+func (e *EmployeeAcceptance) Fuzzification(number *Number) error {
+	number.CompetenceMembership = append(number.CompetenceMembership, e.CompetenceLow(number.Interview.Competence))
+	number.CompetenceMembership = append(number.CompetenceMembership, e.ComptenceMiddle(number.Interview.Competence))
+	number.CompetenceMembership = append(number.CompetenceMembership, e.CompetenceHigh(number.Interview.Competence))
 
-	number.PersonalityMembership = append(number.PersonalityMembership, b.PersonalityLow(number.Interview.Personality))
-	number.PersonalityMembership = append(number.PersonalityMembership, b.PersonalityMiddle(number.Interview.Personality))
-	number.PersonalityMembership = append(number.PersonalityMembership, b.PersonalityHigh(number.Interview.Personality))
-
-	return nil
-}
-
-// Defuzzification is
-func (b *BLT) Defuzzification(number *Number) error {
-	number.CrispValue = 0
-	number.CrispValue += number.AcceptedInference * AcceptedValue
-	number.CrispValue += number.ConsideredInference * ConsideredValue
-	number.CrispValue += number.RejectedInference * RejectedValue
-	number.CrispValue /= (number.AcceptedInference + number.ConsideredInference + number.RejectedInference)
+	number.PersonalityMembership = append(number.PersonalityMembership, e.PersonalityLow(number.Interview.Personality))
+	number.PersonalityMembership = append(number.PersonalityMembership, e.PersonalityMiddle(number.Interview.Personality))
+	number.PersonalityMembership = append(number.PersonalityMembership, e.PersonalityHigh(number.Interview.Personality))
 
 	return nil
 }
 
 // Inference is
-func (b *BLT) Inference(number *Number) error {
-	number.AcceptedInference = math.Max(math.Min(number.CompetenceMembership[0], number.PersonalityMembership[2]), math.Min(number.CompetenceMembership[0], number.PersonalityMembership[1]))
-	number.AcceptedInference = math.Max(number.AcceptedInference, math.Min(number.CompetenceMembership[0], number.PersonalityMembership[0]))
+func (e *EmployeeAcceptance) Inference(number *Number) error {
 
-	number.ConsideredInference = math.Max(math.Min(number.CompetenceMembership[1], number.PersonalityMembership[1]), math.Min(number.CompetenceMembership[1], number.PersonalityMembership[2]))
-	number.ConsideredInference = math.Max(number.ConsideredInference, math.Min(number.CompetenceMembership[2], number.PersonalityMembership[2]))
+	lc_lp := float64(math.Min(number.CompetenceMembership[0], number.PersonalityMembership[0]))
+	lc_mp := float64(math.Min(number.CompetenceMembership[0], number.PersonalityMembership[1]))
+	lc_hp := float64(math.Min(number.CompetenceMembership[0], number.PersonalityMembership[2]))
 
-	number.RejectedInference = math.Max(math.Min(number.CompetenceMembership[2], number.PersonalityMembership[0]), math.Min(number.CompetenceMembership[2], number.PersonalityMembership[1]))
-	number.RejectedInference = math.Max(number.RejectedInference, math.Min(number.CompetenceMembership[1], number.PersonalityMembership[0]))
+	mc_lp := float64(math.Min(number.CompetenceMembership[1], number.PersonalityMembership[0]))
+	mc_mp := float64(math.Min(number.CompetenceMembership[1], number.PersonalityMembership[1]))
+	mc_hp := float64(math.Min(number.CompetenceMembership[1], number.PersonalityMembership[2]))
+
+	hc_lp := float64(math.Min(number.CompetenceMembership[2], number.PersonalityMembership[0]))
+	hc_mp := float64(math.Min(number.CompetenceMembership[2], number.PersonalityMembership[1]))
+	hc_hp := float64(math.Min(number.CompetenceMembership[2], number.PersonalityMembership[2]))
+
+	number.AcceptedInference = math.Max(lc_hp, mc_hp)
+	number.AcceptedInference = math.Max(number.AcceptedInference, hc_mp)
+	number.AcceptedInference = math.Max(number.AcceptedInference, hc_hp)
+
+	number.RejectedInference = math.Max(lc_lp, lc_mp)
+	number.RejectedInference = math.Max(number.RejectedInference, mc_lp)
+	number.RejectedInference = math.Max(number.RejectedInference, mc_mp)
+	number.RejectedInference = math.Max(number.RejectedInference, hc_lp)
+
+	return nil
+}
+
+// Defuzzification is
+func (e *EmployeeAcceptance) Defuzzification(number *Number) error {
+	number.CrispValue = 0
+	number.CrispValue += number.AcceptedInference * AcceptedValue
+	number.CrispValue += number.RejectedInference * RejectedValue
+	number.CrispValue /= (number.AcceptedInference + number.RejectedInference)
+
+	if number.CrispValue > 50.0 {
+		number.Inference = "Ya"
+	} else {
+		number.Inference = "Tidak"
+	}
 
 	return nil
 }
 
 // CompetenceLow is
-func (b *BLT) CompetenceLow(competence float64) float64 {
-	if competence <= MustBeLowCompetence {
+func (e *EmployeeAcceptance) CompetenceLow(competence float64) float64 {
+	if competence <= LowCompetence {
 		return 1
-	} else if competence > MustNotBeLowCompetence {
+	} else if competence > NotLowCompetence {
 		return 0
 	}
-	return 1 - (float64(competence-MustBeLowCompetence) / float64(MustNotBeLowPersonality-MustBeLowCompetence))
+	return 1 - (float64(competence-LowCompetence) / float64(NotLowCompetence-LowCompetence))
 }
 
 // ComptenceMiddle is
-func (b *BLT) ComptenceMiddle(competence float64) float64 {
-	if competence > MustBeMiddleLowCompetence && competence <= MustBeMiddleHighCompetence {
+func (e *EmployeeAcceptance) ComptenceMiddle(competence float64) float64 {
+	if competence > MiddleLowCompetence && competence <= MiddleHighCompetence {
 		return 1
-	} else if competence < MustNotBeMiddleLowCompetence || competence > MustNotBeMiddleHighCompetence {
+	} else if competence <= NotMiddleLowCompetence || competence > NotMiddleHighCompetence {
 		return 0
-	} else if competence < MustBeMiddleLowCompetence && competence >= MustNotBeMiddleLowCompetence {
-		return float64(competence-MustBeMiddleLowCompetence) / float64(MustBeLowCompetence-MustNotBeLowCompetence)
+	} else if competence < MiddleLowCompetence && competence >= NotMiddleLowCompetence {
+		return float64(competence-NotMiddleLowCompetence) / float64(MiddleLowCompetence-NotMiddleLowCompetence)
 	}
-	return 1 - (float64(competence-MustBeMiddleHighCompetence) / float64(MustNotBeMiddleHighCompetence-MustBeMiddleHighCompetence))
+	return 1 - (float64(competence-MiddleHighCompetence) / float64(NotMiddleHighCompetence-MiddleHighCompetence))
 }
 
 // CompetenceHigh is
-func (b *BLT) CompetenceHigh(competence float64) float64 {
-	if competence <= MustNotBeHighCompetence {
+func (e *EmployeeAcceptance) CompetenceHigh(competence float64) float64 {
+	if competence <= NotHighCompetence {
 		return 0
-	} else if competence > MustBeHighCompetence {
+	} else if competence > HighCompetence {
 		return 1
 	}
-	return float64(competence-MustNotBeHighCompetence) / float64(MustBeHighCompetence-MustNotBeHighCompetence)
+	return float64(competence-NotHighCompetence) / float64(HighCompetence-NotHighCompetence)
 }
 
 // PersonalityLow is
-func (b *BLT) PersonalityLow(personality float64) float64 {
-	if personality <= MustBeLowPersonality {
+func (e *EmployeeAcceptance) PersonalityLow(personality float64) float64 {
+	if personality <= LowPersonality {
 		return 1
-	} else if personality > MustNotBeLowPersonality {
+	} else if personality > NotLowPersonality {
 		return 0
 	}
-	return 1 - (float64(personality-MustBeLowPersonality) / float64(MustNotBeLowPersonality-MustBeLowPersonality))
+	return 1 - (float64(personality-LowPersonality) / float64(NotLowPersonality-LowPersonality))
 }
 
 // PersonalityMiddle is
-func (b *BLT) PersonalityMiddle(personality float64) float64 {
-	if personality > MustBeMiddleLowPersonality && personality <= MustBeMiddleHighPersonality {
+func (e *EmployeeAcceptance) PersonalityMiddle(personality float64) float64 {
+	if personality > MiddleLowPersonality && personality <= MiddleHighPersonality {
 		return 1
-	} else if personality < MustNotBeMiddleLowPersonality || personality > MustNotBeMiddleHighPersonality {
+	} else if personality < NotMiddleLowPersonality || personality > NotMiddleHighPersonality {
 		return 0
-	} else if personality < MustBeMiddleLowPersonality && personality >= MustNotBeMiddleLowPersonality {
-		return float64(personality-MustBeMiddleLowPersonality) / float64(MustBeLowPersonality-MustNotBeLowPersonality)
+	} else if personality < MiddleLowPersonality && personality >= NotMiddleLowCompetence {
+		return float64(personality-NotMiddleLowPersonality) / float64(MiddleLowPersonality-NotMiddleLowPersonality)
 	}
-	return 1 - (float64(personality-MustBeMiddleHighPersonality) / float64(MustNotBeMiddleHighPersonality-MustBeMiddleHighPersonality))
+	return 1 - (float64(personality-MiddleHighPersonality) / float64(NotMiddleHighPersonality-MiddleHighPersonality))
 }
 
 // PersonalityHigh is
-func (b *BLT) PersonalityHigh(personality float64) float64 {
-	if personality <= MustNotBeHighPersonality {
+func (e *EmployeeAcceptance) PersonalityHigh(personality float64) float64 {
+	if personality <= NotHighPersonality {
 		return 0
-	} else if personality > MustBeHighPersonality {
+	} else if personality > HighPersonality {
 		return 1
 	}
-	return float64(personality-MustNotBeHighPersonality) / float64(MustBeHighPersonality-MustNotBeHighPersonality)
+	return float64(personality-NotHighPersonality) / float64(HighPersonality-NotHighPersonality)
 }

@@ -12,7 +12,7 @@ require (
 	golang.org/x/net v0.0.0-20190415214537-1da14a5a36f2 // indirect
 	golang.org/x/sys v0.0.0-20190418153312-f0ce4c0180be // indirect
 	golang.org/x/tools v0.0.0-20190418152851-6732636ccdfd // indirect
-	gonum.org/v1/gonum v0.0.0-20190418073911-7c4bc5eb9955 // indirect
+	gonum.org/v1/gonum v0.0.0-20190418214431-5e6a2d4f3605 // indirect
 	gonum.org/v1/netlib v0.0.0-20190331212654-76723241ea4e // indirect
-	gonum.org/v1/plot v0.0.0-20190410204940-3a5f52653745 // indirect
+	gonum.org/v1/plot v0.0.0-20190410204940-3a5f52653745
 )
