@@ -63,20 +63,8 @@ func main() {
 	}
 
 	// INSERTING DATA TO PREDICTION
-	head := []string{
-		"ID",
-		"Tes Kompetensi",
-		"Kepribadian",
-		"Diterima",
-	}
-	if err := writer.Write(head); err != nil {
-		log.Fatalln("error writing record to csv:", err)
-	}
-	for i := range data {
+	for i := 20; i < len(data); i++ {
 		csvData := []string{
-			fmt.Sprintf("%s", data[i].Interview.ID),
-			fmt.Sprintf("%.1f", data[i].Interview.Competence),
-			fmt.Sprintf("%.1f", data[i].Interview.Personality),
 			fmt.Sprintf("%s", data[i].Inference),
 		}
 		if err := writer.Write(csvData); err != nil {
