@@ -5,9 +5,9 @@ import (
 )
 
 const (
-	// LowCompetence is
+	// LowCompetence is const value for competence that is low
 	LowCompetence = 50
-	// NotLowCompetence is
+	// NotLowCompetence is const value for competence that is not low
 	NotLowCompetence = 55
 
 	// NotMiddleLowCompetence is
@@ -19,16 +19,16 @@ const (
 	// NotMiddleHighCompetence is
 	NotMiddleHighCompetence = 67.5
 
-	// NotHighCompetence is
+	// NotHighCompetence is const value for competence that is not high
 	NotHighCompetence = 65
-	// HighCompetence is
+	// HighCompetence is const value for competence that is high
 	HighCompetence = 70
 )
 
 const (
-	// LowPersonality is
+	// LowPersonality is const value for personality that is low
 	LowPersonality = 50
-	// NotLowPersonality is
+	// NotLowPersonality is const value for personality that is not low
 	NotLowPersonality = 55
 
 	// NotMiddleLowPersonality is
@@ -40,34 +40,34 @@ const (
 	// NotMiddleHighPersonality is
 	NotMiddleHighPersonality = 75
 
-	// NotHighPersonality is
+	// NotHighPersonality is const value for personality that is not high
 	NotHighPersonality = 70
-	//HighPersonality is
+	//HighPersonality is const value for personality that is high
 	HighPersonality = 77.5
 )
 
 const (
-	// AcceptedValue is
+	// AcceptedValue is const value of Takagi-Sugeno Method, that the value is accepted
 	AcceptedValue = 100
-	// RejectedValue is
+	// RejectedValue is const value of Takagi-Sugeno Method, that the value is rejected
 	RejectedValue = 50
 )
 
-// Fuzzy is
+// Fuzzy is the main interface of a fuzzy logic algorithm
 type Fuzzy interface {
 	Fuzzification(number *Number) error
 	Defuzzification(number *Number) error
 	Inference(number *Number) error
 }
 
-// Interview is
+// Interview is the struct for data needed for this program
 type Interview struct {
 	ID          string
 	Competence  float64
 	Personality float64
 }
 
-// Number is
+// Number is the struct that holds fuzzy data
 type Number struct {
 	Interview Interview
 
@@ -81,11 +81,11 @@ type Number struct {
 	Inference  string
 }
 
-// EmployeeAcceptance is
+// EmployeeAcceptance is the struct that holds the fuzzy algorithm process
 type EmployeeAcceptance struct {
 }
 
-// Fuzzification is
+// Fuzzification is a function that will transfer crisp data into linguistic
 func (e *EmployeeAcceptance) Fuzzification(number *Number) error {
 	number.CompetenceMembership = append(number.CompetenceMembership, e.CompetenceLow(number.Interview.Competence))
 	number.CompetenceMembership = append(number.CompetenceMembership, e.ComptenceMiddle(number.Interview.Competence))
@@ -98,34 +98,34 @@ func (e *EmployeeAcceptance) Fuzzification(number *Number) error {
 	return nil
 }
 
-// Inference is
+// Inference is a function that change from raw linguistic into fuzzy linguistic
 func (e *EmployeeAcceptance) Inference(number *Number) error {
 
-	lc_lp := float64(math.Min(number.CompetenceMembership[0], number.PersonalityMembership[0]))
-	lc_mp := float64(math.Min(number.CompetenceMembership[0], number.PersonalityMembership[1]))
-	lc_hp := float64(math.Min(number.CompetenceMembership[0], number.PersonalityMembership[2]))
+	lcLp := float64(math.Min(number.CompetenceMembership[0], number.PersonalityMembership[0]))
+	lcMp := float64(math.Min(number.CompetenceMembership[0], number.PersonalityMembership[1]))
+	lcHp := float64(math.Min(number.CompetenceMembership[0], number.PersonalityMembership[2]))
 
-	mc_lp := float64(math.Min(number.CompetenceMembership[1], number.PersonalityMembership[0]))
-	mc_mp := float64(math.Min(number.CompetenceMembership[1], number.PersonalityMembership[1]))
-	mc_hp := float64(math.Min(number.CompetenceMembership[1], number.PersonalityMembership[2]))
+	mcLp := float64(math.Min(number.CompetenceMembership[1], number.PersonalityMembership[0]))
+	mcMp := float64(math.Min(number.CompetenceMembership[1], number.PersonalityMembership[1]))
+	mcHp := float64(math.Min(number.CompetenceMembership[1], number.PersonalityMembership[2]))
 
-	hc_lp := float64(math.Min(number.CompetenceMembership[2], number.PersonalityMembership[0]))
-	hc_mp := float64(math.Min(number.CompetenceMembership[2], number.PersonalityMembership[1]))
-	hc_hp := float64(math.Min(number.CompetenceMembership[2], number.PersonalityMembership[2]))
+	hcLp := float64(math.Min(number.CompetenceMembership[2], number.PersonalityMembership[0]))
+	hcMp := float64(math.Min(number.CompetenceMembership[2], number.PersonalityMembership[1]))
+	hcHp := float64(math.Min(number.CompetenceMembership[2], number.PersonalityMembership[2]))
 
-	number.AcceptedInference = math.Max(lc_hp, mc_hp)
-	number.AcceptedInference = math.Max(number.AcceptedInference, hc_mp)
-	number.AcceptedInference = math.Max(number.AcceptedInference, hc_hp)
+	number.AcceptedInference = math.Max(lcHp, mcHp)
+	number.AcceptedInference = math.Max(number.AcceptedInference, hcMp)
+	number.AcceptedInference = math.Max(number.AcceptedInference, hcHp)
 
-	number.RejectedInference = math.Max(lc_lp, lc_mp)
-	number.RejectedInference = math.Max(number.RejectedInference, mc_lp)
-	number.RejectedInference = math.Max(number.RejectedInference, mc_mp)
-	number.RejectedInference = math.Max(number.RejectedInference, hc_lp)
+	number.RejectedInference = math.Max(lcLp, lcMp)
+	number.RejectedInference = math.Max(number.RejectedInference, mcLp)
+	number.RejectedInference = math.Max(number.RejectedInference, mcMp)
+	number.RejectedInference = math.Max(number.RejectedInference, hcLp)
 
 	return nil
 }
 
-// Defuzzification is
+// Defuzzification is a function that will transfer fuzzy linguistic into crisp data
 func (e *EmployeeAcceptance) Defuzzification(number *Number) error {
 	number.CrispValue = 0
 	number.CrispValue += number.AcceptedInference * AcceptedValue
@@ -141,7 +141,7 @@ func (e *EmployeeAcceptance) Defuzzification(number *Number) error {
 	return nil
 }
 
-// CompetenceLow is
+// CompetenceLow is a function that determine low competence value
 func (e *EmployeeAcceptance) CompetenceLow(competence float64) float64 {
 	if competence <= LowCompetence {
 		return 1
@@ -151,7 +151,7 @@ func (e *EmployeeAcceptance) CompetenceLow(competence float64) float64 {
 	return 1 - (float64(competence-LowCompetence) / float64(NotLowCompetence-LowCompetence))
 }
 
-// ComptenceMiddle is
+// ComptenceMiddle is a function that determine middle competence value
 func (e *EmployeeAcceptance) ComptenceMiddle(competence float64) float64 {
 	if competence > MiddleLowCompetence && competence <= MiddleHighCompetence {
 		return 1
@@ -163,7 +163,7 @@ func (e *EmployeeAcceptance) ComptenceMiddle(competence float64) float64 {
 	return 1 - (float64(competence-MiddleHighCompetence) / float64(NotMiddleHighCompetence-MiddleHighCompetence))
 }
 
-// CompetenceHigh is
+// CompetenceHigh is a function that determine high competence value
 func (e *EmployeeAcceptance) CompetenceHigh(competence float64) float64 {
 	if competence <= NotHighCompetence {
 		return 0
@@ -173,7 +173,7 @@ func (e *EmployeeAcceptance) CompetenceHigh(competence float64) float64 {
 	return float64(competence-NotHighCompetence) / float64(HighCompetence-NotHighCompetence)
 }
 
-// PersonalityLow is
+// PersonalityLow is a function that determine low personality value
 func (e *EmployeeAcceptance) PersonalityLow(personality float64) float64 {
 	if personality <= LowPersonality {
 		return 1
@@ -183,7 +183,7 @@ func (e *EmployeeAcceptance) PersonalityLow(personality float64) float64 {
 	return 1 - (float64(personality-LowPersonality) / float64(NotLowPersonality-LowPersonality))
 }
 
-// PersonalityMiddle is
+// PersonalityMiddle is a function that determine middle personality value
 func (e *EmployeeAcceptance) PersonalityMiddle(personality float64) float64 {
 	if personality > MiddleLowPersonality && personality <= MiddleHighPersonality {
 		return 1
@@ -195,7 +195,7 @@ func (e *EmployeeAcceptance) PersonalityMiddle(personality float64) float64 {
 	return 1 - (float64(personality-MiddleHighPersonality) / float64(NotMiddleHighPersonality-MiddleHighPersonality))
 }
 
-// PersonalityHigh is
+// PersonalityHigh is a function that determine high personality value
 func (e *EmployeeAcceptance) PersonalityHigh(personality float64) float64 {
 	if personality <= NotHighPersonality {
 		return 0

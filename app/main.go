@@ -126,12 +126,12 @@ func main() {
 
 	plt.Save(15*vg.Inch, 15*vg.Inch, "contour.svg")
 
-	// PLOT TES KOMPENTENSI FUNCTION
+	// PLOT COMPETENCE MEMBERSHIP FUNCTION
 	p, err := plot.New()
 	if err != nil {
 		panic(err)
 	}
-	p.Title.Text = "Tes Kompetensi Membership Functions"
+	p.Title.Text = "Membership Function Tes Kompetensi"
 	p.X.Label.Text = "Tes Kompetensi"
 	p.Y.Label.Text = "Fuzzy"
 
@@ -155,12 +155,12 @@ func main() {
 		panic(err)
 	}
 
-	// PLOT PERSONALITY FUNCTION
+	// PLOT PERSONALITY MEMBERSHIP FUNCTION
 	p, err = plot.New()
 	if err != nil {
 		panic(err)
 	}
-	p.Title.Text = "Kepribadian Membership Functions"
+	p.Title.Text = "Membership Function Kepribadian"
 	p.X.Label.Text = "Kepribadian"
 	p.Y.Label.Text = "Fuzzy"
 
