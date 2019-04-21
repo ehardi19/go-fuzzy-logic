@@ -112,7 +112,8 @@ func main() {
 	}
 	plt.Add(sc)
 
-	plt.Save(15*vg.Inch, 15*vg.Inch, "contour.svg")
+	// Save the plot to a PNG file.
+	plt.Save(15*vg.Inch, 15*vg.Inch, "contour.png")
 
 	// PLOT COMPETENCE MEMBERSHIP FUNCTION
 	p, err := plot.New()
@@ -121,7 +122,7 @@ func main() {
 	}
 	p.Title.Text = "Membership Function Tes Kompetensi"
 	p.X.Label.Text = "Tes Kompetensi"
-	p.Y.Label.Text = "Fuzzy"
+	p.Y.Label.Text = "μ"
 
 	low := plotter.NewFunction(employeeAcceptance.CompetenceLow)
 	low.Color = color.RGBA{R: 255, A: 255}
@@ -139,7 +140,8 @@ func main() {
 	p.Y.Min = 0
 	p.Y.Max = 1
 
-	if err := p.Save(5*vg.Inch, 5*vg.Inch, "competenceFunction.svg"); err != nil {
+	// Save the plot to a PNG file.
+	if err := p.Save(5*vg.Inch, 5*vg.Inch, "competenceFunction.png"); err != nil {
 		panic(err)
 	}
 
@@ -150,7 +152,7 @@ func main() {
 	}
 	p.Title.Text = "Membership Function Kepribadian"
 	p.X.Label.Text = "Kepribadian"
-	p.Y.Label.Text = "Fuzzy"
+	p.Y.Label.Text = "μ"
 
 	low = plotter.NewFunction(employeeAcceptance.PersonalityLow)
 	low.Color = color.RGBA{R: 255, A: 255}
@@ -169,7 +171,7 @@ func main() {
 	p.Y.Max = 1
 
 	// Save the plot to a PNG file.
-	if err := p.Save(5*vg.Inch, 5*vg.Inch, "personalityFunction.svg"); err != nil {
+	if err := p.Save(5*vg.Inch, 5*vg.Inch, "personalityFunction.png"); err != nil {
 		panic(err)
 	}
 }
